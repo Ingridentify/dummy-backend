@@ -1,0 +1,28 @@
+{
+  "name": "dummy-backend",
+  "version": "1.0.0",
+  "description": "This is a dummy backend for Ingridentify android app",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "seed": "node seed.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ingridentify/dummy-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ingridentify/dummy-backend/issues"
+  },
+  "homepage": "https://github.com/Ingridentify/dummy-backend#readme",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "json-modelizer": "^1.0.7"
+  }
+}
