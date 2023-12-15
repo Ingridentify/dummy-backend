@@ -21,7 +21,13 @@ This is a dummy backend for [Ingridentify android app](https://github.com/Ingrid
    ```
 
 3. Create a `.env` file in the root directory or just copy the `.env.example` file
-4. Start the server
+4. Seed the database
+
+   ```bash
+   npm run seed
+   ```
+
+5. Start the server
 
    ```bash
    npm start

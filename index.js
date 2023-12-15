@@ -1,10 +1,13 @@
 import dotenv from "dotenv";
 import express from "express";
 import User from "./model/User.js";
+import LoginResponse from "./response/LoginResponse.js";
+import ErrorResponse from "./response/ErrorResponse.js";
 
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
   res.json({
@@ -18,9 +21,8 @@ app.get("/", (req, res) => {
           email: "string",
           password: "string",
         },
-        response: {
-          token: "string",
-        },
+        successResponse: LoginResponse.create(User.first()),
+        errorResponse: ErrorResponse.create("User not found"),
       },
     ],
   });
@@ -31,20 +33,14 @@ app.post("/auth/login", (req, res) => {
 
   const user = User.findBy("email", email);
   if (!user) {
-    res.status(404).json({
-      message: "User not found",
-    });
+    return res.status(404).json(ErrorResponse.create("User not found"));
   }
 
   if (user.password !== password) {
-    res.status(401).json({
-      message: "Wrong password",
-    });
+    return res.status(401).json(ErrorResponse.create("Wrong password"));
   }
 
-  res.status(200).json({
-    token: user.token,
-  });
+  return res.status(200).json(LoginResponse.create(user));
 });
 
 app.listen(port, () => {
