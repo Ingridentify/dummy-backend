@@ -33,12 +33,44 @@ This is a dummy backend for [Ingridentify android app](https://github.com/Ingrid
    npm start
    ```
 
+6. The server should be running on `http://localhost:3000`
+
 ## Endpoints
 
 The default port is `3000`, but can be changed by setting the `PORT` environment variable.
 
 ### Auth
 
-| Method | Endpoint    | Description | Body                                | Response          |
-| ------ | ----------- | ----------- | ----------------------------------- | ----------------- |
-| POST   | /auth/login | Login User  | { email: string, password: string } | { token: string } |
+#### Login
+
+```http
+POST /auth/login
+```
+
+##### Request body
+
+| Parameter | Type   | Required           |
+| --------- | ------ | ------------------ |
+| email     | string | :white_check_mark: |
+| password  | string | :white_check_mark: |
+
+##### Response
+
+###### Success
+
+```json
+{
+  "name": "Fauzan",
+  "username": "fauzan",
+  "email": "fauzan@email.com",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+}
+```
+
+###### Error
+
+```json
+{
+  "message": "Invalid email or password"
+}
+```
