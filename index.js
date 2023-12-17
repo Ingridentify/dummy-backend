@@ -1,8 +1,9 @@
 import dotenv from "dotenv";
 import express from "express";
-import User from "./model/User.js";
+import { User, History } from "./model/index.js";
 import LoginResponse from "./response/LoginResponse.js";
 import ErrorResponse from "./response/ErrorResponse.js";
+import RecipeResponse from "./response/RecipeResponse.js";
 
 dotenv.config();
 const app = express();
@@ -41,6 +42,20 @@ app.post("/auth/login", (req, res) => {
   }
 
   return res.status(200).json(LoginResponse.create(user));
+});
+
+app.get("/histories", (req, res) => {
+  const token = req.headers.authorization.split(" ")[1];
+  const user = User.findBy("token", token);
+  if (!user) {
+    return res.status(401).json(ErrorResponse.create("Unauthorized"));
+  }
+
+  const histories = History.where("userId", user.id);
+
+  return res
+    .status(200)
+    .json(RecipeResponse.create(histories.map((history) => history.recipe)));
 });
 
 app.listen(port, () => {
