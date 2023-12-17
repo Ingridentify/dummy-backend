@@ -1,16 +1,23 @@
 import dotenv from "dotenv";
 import express from "express";
-import { User, History } from "./model/index.js";
-import LoginResponse from "./response/LoginResponse.js";
-import ErrorResponse from "./response/ErrorResponse.js";
-import RecipeResponse from "./response/RecipeResponse.js";
+import { User } from "./model/index.js";
+import {
+  ErrorResponse,
+  LoginResponse,
+  RecipeResponse,
+} from "./response/index.js";
+import { AuthController, RecipeController } from "./controller/index.js";
+import { logger } from "./middleware/index.js";
 
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 app.use(express.urlencoded({ extended: true }));
 
+app.use(logger);
+
 app.get("/", (req, res) => {
+  console.log(User.first().history);
   res.json({
     message: "Hello world!",
     endpoints: [
@@ -25,38 +32,28 @@ app.get("/", (req, res) => {
         successResponse: LoginResponse.create(User.first()),
         errorResponse: ErrorResponse.create("User not found"),
       },
+      {
+        path: "/histories",
+        method: "GET",
+        description: "Get user's histories",
+        query: {
+          page: "number",
+          limit: "number",
+        },
+        headers: {
+          Authorization: "Bearer <token>",
+        },
+        successResponse: RecipeResponse.create(
+          User.first().history.map((history) => history.recipe)
+        ),
+        errorResponse: ErrorResponse.create("Unauthorized"),
+      },
     ],
   });
 });
 
-app.post("/auth/login", (req, res) => {
-  const { email, password } = req.body;
-
-  const user = User.findBy("email", email);
-  if (!user) {
-    return res.status(404).json(ErrorResponse.create("User not found"));
-  }
-
-  if (user.password !== password) {
-    return res.status(401).json(ErrorResponse.create("Wrong password"));
-  }
-
-  return res.status(200).json(LoginResponse.create(user));
-});
-
-app.get("/histories", (req, res) => {
-  const token = req.headers.authorization.split(" ")[1];
-  const user = User.findBy("token", token);
-  if (!user) {
-    return res.status(401).json(ErrorResponse.create("Unauthorized"));
-  }
-
-  const histories = History.where("userId", user.id);
-
-  return res
-    .status(200)
-    .json(RecipeResponse.create(histories.map((history) => history.recipe)));
-});
+app.post("/auth/login", AuthController.login);
+app.get("/histories", RecipeController.histories);
 
 app.listen(port, () => {
   console.log(`Example app listening on http://127.0.0.1:${port}`);
