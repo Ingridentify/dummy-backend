@@ -9,7 +9,15 @@ router.get("/", (req, res) => {
 });
 
 export default class Route {
-  static #new({ description, path, method, body, query, headers, response }) {
+  static #new({
+    description = "",
+    path = "",
+    method = Route.#method.GET,
+    body = {},
+    query = {},
+    headers = {},
+    responses = {},
+  }) {
     Route.#routes.push({
       description,
       path,
@@ -17,11 +25,11 @@ export default class Route {
       body,
       query,
       headers,
-      response,
+      responses,
     });
   }
 
-  static get({ description, path, callback, body, query, headers, response }) {
+  static get({ description, path, callback, body, query, headers, responses }) {
     Route.#new({
       description,
       path,
@@ -29,13 +37,21 @@ export default class Route {
       body,
       query,
       headers,
-      response,
+      responses,
     });
 
     return Route.router.get(path, callback);
   }
 
-  static post({ description, path, callback, body, query, headers, response }) {
+  static post({
+    description,
+    path,
+    callback,
+    body,
+    query,
+    headers,
+    responses,
+  }) {
     Route.#new({
       description,
       path,
@@ -43,7 +59,7 @@ export default class Route {
       body,
       query,
       headers,
-      response,
+      responses,
     });
 
     return Route.router.post(path, callback);

@@ -7,11 +7,11 @@ This is a dummy backend for [Ingridentify android app](https://github.com/Ingrid
 1. Clone the repository
 
    ```bash
-   # using ssh
-   git clone git@github:Ingridentify/dummy-backend.git
+      # SSH
+      git clone git@github:Ingridentify/dummy-backend.git Ingridentify-dummy-backend
 
-   # using https
-   git clone https://github.com/Ingridentify/dummy-backend.git
+      # HTTPS
+      git clone https://github.com/Ingridentify/dummy-backend.git Ingridentify-dummy-backend
    ```
 
 2. Install dependencies
@@ -67,9 +67,17 @@ POST /auth/login
 
 ```json
 {
-  "name": "Fauzan",
-  "email": "fauzan@email.com",
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+  "status": "Success",
+  "message": "Login Success",
+  "token": "tzuIiXh9KaC3gzLr9MoK9UmLcP4FYnG3bU9B3OrgTAtoOfKY4rciDLDiBlpsot7d",
+  "userData": {
+    "id": 1,
+    "name": "Fauzan",
+    "email": "fauzan@email.com",
+    "password": "12345678",
+    "createdAt": "2023-12-19T14:29:43.000Z",
+    "updatedAt": "2023-12-19T14:29:43.000Z"
+  }
 }
 ```
 
@@ -106,6 +114,8 @@ GET /history
 
 ##### Response
 
+###### Success
+
 ```json
 [
   {
@@ -130,4 +140,12 @@ GET /history
     "imageUrl": "https://www.blibli.com/friends-backend/wp-content/uploads/2023/04/B300028-Cover-resep-nasi-uduk.jpg"
   }
 ]
+```
+
+###### Error
+
+```json
+{
+  "message": "Unauthorized"
+}
 ```
